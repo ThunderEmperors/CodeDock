@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import SnippetDeck from './components/snippetDeck/SnippetDeck'
-import ProjectDeck from './components/projectDeck/ProjectDeck'
-import EditorDeck from './components/editorDeck/EditorDeck'
+import ElementBuilder from './components/snippetDeck/ElementBuilder'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -10,9 +8,7 @@ function App() {
   return (
     <>
     <div className='main-container flex'>
-      <SnippetDeck />
-      <ProjectDeck />
-      <EditorDeck />
+      <ElementBuilder />
     </div>
     </>
   )

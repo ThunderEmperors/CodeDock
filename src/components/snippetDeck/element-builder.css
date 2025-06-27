@@ -1,0 +1,142 @@
+.element-builder-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  flex-grow: 1;
+}
+
+.elements-panel {
+  flex-grow: 1;
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-panel {
+  flex-grow: 4;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #ddd;
+}
+
+.preview-panel {
+  flex-grow: 4;
+  padding: 15px;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.panel-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.elements-list {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 15px;
+}
+
+.element-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.element-item:hover {
+  background-color: #f0f0f0;
+}
+
+.element-item.selected {
+  background-color: #e3f2fd;
+  border-color: #2196f3;
+}
+
+.drag-handle {
+  margin-right: 10px;
+  color: #777;
+  cursor: grab;
+}
+
+.code-editor-container {
+  flex: 1;
+}
+
+.code-preview {
+  background-color: #282c34;
+  color: #abb2bf;
+  padding: 15px;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.add-button, .export-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.add-button:hover, .export-button:hover {
+  background-color: #45a049;
+}
+
+.export-button {
+  width: 100%;
+  margin-top: 15px;
+  background-color: #2196F3;
+}
+
+.export-button:hover {
+  background-color: #0b7dda;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #777;
+}
+
+/* Add these to your existing CSS */
+.element-item.dragging {
+  background-color: #e1e1e1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.code-preview {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  padding: 10px;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: monospace;
+  height: calc(100% - 40px);
+  overflow-y: auto;
+}
