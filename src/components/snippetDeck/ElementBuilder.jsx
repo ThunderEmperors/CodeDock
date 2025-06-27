@@ -1,28 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Editor from '@monaco-editor/react';
 import './element-builder.css'
+import { useDispatch, useSelector } from 'react-redux';
+import { elementAdded, elementSelected, elementUpdated, setListUpdated } from '../../features/elementselector/elementsSlice';
 import { ReactSortable } from 'react-sortablejs';
 
 
 const ElementBuilder = () => {
-  const [elements, setElements] = useState([
-    { id: '1', name: 'Button', code: '<button>Click me</button>' },
-    { id: '2', name: 'Header', code: '<h1>Title</h1>' },
-    { id: '3', name: 'Paragraph', code: '<p>Some text here</p>' },
-  ]);
-  
-  const [selectedElementId, setSelectedElementId] = useState(null);
 
+  const dispath = useDispatch();
+  const selectedElementId = useSelector(state => state.elementselector.selectedId);
+  const elements = useSelector(state => state.elementselector.elements);
+  
   const selectedElement = elements.find(el => el.id === selectedElementId);
 
   const handleSelectElement = (elementId) => {
-    setSelectedElementId(prevId => prevId === elementId ? null : elementId);
+    dispath(elementSelected(elementId));
+    // setSelectedElementId(prevId => prevId === elementId ? null : elementId);
   };
 
+  const handleSetListUpdate = (elementList) => {
+    dispath(setListUpdated(elementList));
+  }
+
   const handleCodeChange = (value) => {
-    setElements(elements.map(el => 
-      el.id === selectedElementId ? { ...el, code: value } : el
-    ));
+    console.log(value);
+    dispath(elementUpdated(value));
+    
+    // setElements(elements.map(el => 
+    //   el.id === selectedElementId ? { ...el, code: value } : el
+    // ));
   };
 
   const handleAddElement = () => {
@@ -34,8 +41,9 @@ const ElementBuilder = () => {
       code: '<div>New element</div>'
     };
     
-    setElements([...elements, newElement]);
-    setSelectedElementId(newId);
+    // setElements([...elements, newElement]);
+  
+    dispath(elementAdded(newElement));
   };
 
   const handleExport = () => {
@@ -69,13 +77,13 @@ const ElementBuilder = () => {
         </div>
         
         <ReactSortable
-          list={elements}
-          setList={setElements}
+          list={elements.map(e => ({ ...e }))}
+          setList={handleSetListUpdate}
           tag="div"
           className="elements-list"
           // onChoose={(e) => {
           //   const chosenId = elements[e.oldIndex].id;
-          //   setSelectedElementId(chosenId);
+          //   dispath(elementSelected(chosenId));
           // }}
         >
           {elements.map((element) => (
@@ -85,10 +93,9 @@ const ElementBuilder = () => {
               onClick={() => {
 
                 if(selectedElementId === element.id){
-                  console.log(1);
-                  setSelectedElementId(null);
+                  handleSelectElement(null);
                 } else{
-                  handleSelectElement(element.id)
+                  handleSelectElement(element.id);
                 }
                 
               }}
