@@ -4,6 +4,7 @@ const Snippet = require('../models/Snippet');
 // @route   GET /api/snippets
 // @access  Private
 exports.getSnippets = async (req, res, next) => {
+  console.log("Trying to get snippets");
   try {
     const snippets = await Snippet.find({ user: req.user.id });
     res.status(200).json({
@@ -113,6 +114,7 @@ exports.updateSnippet = async (req, res, next) => {
 exports.deleteSnippet = async (req, res, next) => {
   try {
     const snippet = await Snippet.findById(req.params.id);
+    console.log(req.params.id);
 
     if (!snippet) {
       return res.status(404).json({
@@ -129,7 +131,7 @@ exports.deleteSnippet = async (req, res, next) => {
       });
     }
 
-    await snippet.remove();
+    await Snippet.deleteOne({ _id: snippet });
 
     res.status(200).json({
       success: true,

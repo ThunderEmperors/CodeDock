@@ -4,19 +4,25 @@ import './element-builder.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { elementAdded, elementSelected, elementUpdated, setListUpdated } from '../../features/elementselector/elementsSlice';
 import { ReactSortable } from 'react-sortablejs';
+import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 
 const ElementBuilder = () => {
-
+  
   const dispath = useDispatch();
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
   const selectedElementId = useSelector(state => state.elementselector.selectedId);
   const elements = useSelector(state => state.elementselector.elements);
+  
   
   const selectedElement = elements.find(el => el.id === selectedElementId);
 
   const handleSelectElement = (elementId) => {
     dispath(elementSelected(elementId));
-    // setSelectedElementId(prevId => prevId === elementId ? null : elementId);
   };
 
   const handleSetListUpdate = (elementList) => {
@@ -24,24 +30,17 @@ const ElementBuilder = () => {
   }
 
   const handleCodeChange = (value) => {
-    console.log(value);
     dispath(elementUpdated(value));
     
-    // setElements(elements.map(el => 
-    //   el.id === selectedElementId ? { ...el, code: value } : el
-    // ));
   };
 
   const handleAddElement = () => {
-    console.log(elements.map(el => el.id));
     const newId = String(Date.now());
     const newElement = {
       id: newId,
       name: `Element ${elements.length + 1}`,
       code: '<div>New element</div>'
     };
-    
-    // setElements([...elements, newElement]);
   
     dispath(elementAdded(newElement));
   };
@@ -63,6 +62,66 @@ const ElementBuilder = () => {
     linkElement.click();
   };
 
+  const API_URL = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem('token');
+  const location = useLocation();
+  const id = location.state?.id;
+
+  const updateSnippet = async () => {
+    const token = localStorage.getItem('token');
+  
+    const res = await fetch(`${API_URL}${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ elements: elements }),
+    });
+  
+    const data = await res.json();
+  
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to update snippet');
+    }
+  
+    return data.data;
+  };
+
+  const fetchSnippet = async (id) => {
+    try {
+      const res = await fetch(`${API_URL}${id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to delete project');
+      console.log(data);
+      handleSetListUpdate(data.data.elements);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  useEffect(() => {
+    const authFetch = async () => {
+      try {
+        await fetchSnippet(id);
+      } catch(err) {
+        setError(err);
+      } finally{
+        setLoading(false);
+      }
+    }
+
+    authFetch();
+  }, [])
+
+  if(error) return(<div>Error : {error}</div>)
+  if(loading) return(<div>Loading....</div>)
+
   return (
     <div className="element-builder-container flex height-[100vh]">
       <div className="elements-panel">
@@ -76,6 +135,7 @@ const ElementBuilder = () => {
           </button>
         </div>
         
+        { elements.length > 0 ?
         <ReactSortable
           list={elements.map(e => ({ ...e }))}
           setList={handleSetListUpdate}
@@ -104,7 +164,7 @@ const ElementBuilder = () => {
             <span>{element.name}</span>
           </div>
           ))}
-        </ReactSortable>
+        </ReactSortable> : <>No Elements Present</>}
 
         
         <button 
@@ -112,6 +172,11 @@ const ElementBuilder = () => {
           className="export-button"
         >
           Export JSON
+        </button>
+        <button
+          onClick={updateSnippet}
+        >
+          SAVE SNIPPET
         </button>
       </div>
       
