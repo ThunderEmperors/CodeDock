@@ -7,7 +7,6 @@ const { secret, expiresIn } = require('../config/jwt');
 // @access  Public
 exports.register = async (req, res, next) => {
   const { username, email, password } = req.body;
-
   try {
     const user = await User.create({
       username,
@@ -39,8 +38,8 @@ exports.login = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ email }).select('+password');
-
     if (!user) {
+      console.log("user not found")
       return res.status(401).json({
         success: false,
         error: 'Invalid credentials',
@@ -60,7 +59,7 @@ exports.login = async (req, res, next) => {
   } catch (err) {
     res.status(401).json({
       success: false,
-      error: 'Invalid credentials',
+      error: err.message,
     });
   }
 };
@@ -81,6 +80,8 @@ const sendTokenResponse = (user, statusCode, res) => {
   if (process.env.NODE_ENV === 'production') {
     options.secure = true;
   }
+
+  console.log("sending cookies")
 
   res
     .status(statusCode)

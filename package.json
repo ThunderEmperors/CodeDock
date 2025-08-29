@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "@reduxjs/toolkit": "^2.8.2",
     "@tailwindcss/vite": "^4.1.11",
     "@uiw/react-codemirror": "^4.23.13",
@@ -22,6 +23,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.3",
     "react-simple-code-editor": "^0.14.1",
+    "react-sortablejs": "^6.1.4",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {

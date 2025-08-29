@@ -123,7 +123,7 @@ const ElementBuilder = () => {
   if(loading) return(<div>Loading....</div>)
 
   return (
-    <div className="element-builder-container flex height-[100vh]">
+    <div className="element-builder-container flex height-[100vh] w-full">
       <div className="elements-panel">
         <div className="panel-header">
           <h2>Elements</h2>
@@ -189,7 +189,7 @@ const ElementBuilder = () => {
             <div className="code-editor-container">
               <Editor
                 height="100%"
-                defaultLanguage="html"
+                defaultLanguage="cpp"
                 value={selectedElement.code}
                 onChange={handleCodeChange}
                 theme="vs-light"

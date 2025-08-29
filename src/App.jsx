@@ -8,12 +8,14 @@ import RegisterPage from './components/pages/Register'
 import Dashboard from './components/pages/Dashboard'
 import { PublicRoute } from './PublicRoute'
 import ProjectsPage from './components/projectsPage/ProjectsPage'
+import Navbar from './components/Navbar'
 
 function App() {
 
   return (
     <Router>
       <AuthProvider>
+        <Navbar />
         <Routes>
             <Route
             path="/login"
@@ -40,7 +42,7 @@ function App() {
             }
           />
           <Route
-            path='/dashboard'
+            path='/'
             element={
               <PrivateRoute>
                 <Dashboard />
@@ -48,7 +50,7 @@ function App() {
             }
           />
           <Route
-            path='/'
+            path='/projects'
             element={
               <PrivateRoute>
                 <ProjectsPage />
