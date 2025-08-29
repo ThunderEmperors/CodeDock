@@ -1,13 +1,30 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../AuthContext";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Projects", path: "/projects" },
-    { name: "Contact", path: "/contact" },
   ];
+
+  const [error, setError] = useState('');
+
+  const navigate = useNavigate();
+
+  const { logout } = useAuth();
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+      await logout();
+      navigate('/register', {replace: true})
+    } catch (err){
+      setError(err);
+    }
+  }
+
 
   return (
     <nav className="bg-gray-600 text-white shadow-md">
@@ -32,9 +49,14 @@ const Navbar = () => {
             </NavLink>
           ))}
         </div>
+        
+        {error && <div className="alert error">{error}</div>}
 
         <div className="md:hidden">
           <button className="text-white focus:outline-none">☰</button>
+        </div>
+        <div >
+          <button className="text-white focus:outline-none" onClick={handleLogout}>LogOut</button>
         </div>
       </div>
     </nav>

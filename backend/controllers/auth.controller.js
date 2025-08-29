@@ -39,7 +39,6 @@ exports.login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
-      console.log("user not found")
       return res.status(401).json({
         success: false,
         error: 'Invalid credentials',
@@ -80,8 +79,6 @@ const sendTokenResponse = (user, statusCode, res) => {
   if (process.env.NODE_ENV === 'production') {
     options.secure = true;
   }
-
-  console.log("sending cookies")
 
   res
     .status(statusCode)

@@ -23,6 +23,7 @@ export function AuthProvider({ children }) {
 
   const logout = async () => {
     await auth.logout();
+    setUser(null);
   };
 
   const register = async (userData) => {

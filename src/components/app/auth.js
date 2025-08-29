@@ -14,7 +14,7 @@ const auth = {
   },
 
   async logout() {
-    await api.post('/auth/logout');
+    // await api.post('/auth/logout');
     localStorage.removeItem('token');
   },
 

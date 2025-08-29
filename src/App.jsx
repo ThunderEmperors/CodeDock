@@ -9,6 +9,7 @@ import Dashboard from './components/pages/Dashboard'
 import { PublicRoute } from './PublicRoute'
 import ProjectsPage from './components/projectsPage/ProjectsPage'
 import Navbar from './components/Navbar'
+import About from './components/pages/About'
 
 function App() {
 
@@ -17,7 +18,13 @@ function App() {
       <AuthProvider>
         <Navbar />
         <Routes>
-            <Route
+          <Route
+            path='/about'
+            element={
+              <About />
+            }
+          />
+          <Route
             path="/login"
             element={
               <PublicRoute>

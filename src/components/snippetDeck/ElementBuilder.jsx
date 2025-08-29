@@ -18,7 +18,6 @@ const ElementBuilder = () => {
   const selectedElementId = useSelector(state => state.elementselector.selectedId);
   const elements = useSelector(state => state.elementselector.elements);
   
-  
   const selectedElement = elements.find(el => el.id === selectedElementId);
 
   const handleSelectElement = (elementId) => {
@@ -62,7 +61,7 @@ const ElementBuilder = () => {
     linkElement.click();
   };
 
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL + '/snippets';
   const token = localStorage.getItem('token');
   const location = useLocation();
   const id = location.state?.id;
@@ -70,7 +69,7 @@ const ElementBuilder = () => {
   const updateSnippet = async () => {
     const token = localStorage.getItem('token');
   
-    const res = await fetch(`${API_URL}${id}`, {
+    const res = await fetch(`${API_URL}/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -90,7 +89,7 @@ const ElementBuilder = () => {
 
   const fetchSnippet = async (id) => {
     try {
-      const res = await fetch(`${API_URL}${id}`, {
+      const res = await fetch(`${API_URL}/${id}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -123,7 +122,7 @@ const ElementBuilder = () => {
   if(loading) return(<div>Loading....</div>)
 
   return (
-    <div className="element-builder-container flex height-[100vh] w-full">
+    <div className="element-builder-container flex w-full">
       <div className="elements-panel">
         <div className="panel-header">
           <h2>Elements</h2>
@@ -133,8 +132,23 @@ const ElementBuilder = () => {
           >
             + Add
           </button>
+
         </div>
-        
+        <div>
+          <button 
+            onClick={handleExport}
+            className="export-button"
+          >
+            Export JSON
+          </button>
+          <button
+            onClick={updateSnippet}
+            className='export-button mb-2'
+          >
+            SAVE SNIPPET
+          </button> 
+        </div>
+
         { elements.length > 0 ?
         <ReactSortable
           list={elements.map(e => ({ ...e }))}
@@ -167,17 +181,7 @@ const ElementBuilder = () => {
         </ReactSortable> : <>No Elements Present</>}
 
         
-        <button 
-          onClick={handleExport}
-          className="export-button"
-        >
-          Export JSON
-        </button>
-        <button
-          onClick={updateSnippet}
-        >
-          SAVE SNIPPET
-        </button>
+
       </div>
       
       <div className="editor-panel">
